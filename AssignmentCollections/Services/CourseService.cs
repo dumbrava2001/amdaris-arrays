@@ -27,9 +27,25 @@ public class CourseService
         return (CourseResponseDto)AutoMapper.MapEntityToResponseDto(_courseRepository.Save(newCourse));
     }
 
+    public CourseResponseDto GetCourseById(Guid id) =>
+        (CourseResponseDto)AutoMapper.MapEntityToResponseDto(_courseRepository.GetById(id));
+
     public IEnumerable<CourseResponseDto?> GetAllCourses()
     {
         return _courseRepository.GetAll()
             .Select(entity => AutoMapper.MapEntityToResponseDto(entity) as CourseResponseDto).ToList();
     }
+
+    public CourseResponseDto UpdateCourse(Guid id, CourseRequestDto updateRequest)
+    {
+        var existingCourse = _courseRepository.GetById(id);
+        existingCourse.Title = updateRequest.Title;
+        existingCourse.Color = updateRequest.Color;
+        existingCourse.EnrollType = updateRequest.EnrollType;
+        existingCourse.Image = updateRequest.ImagePath;
+
+        return (CourseResponseDto)AutoMapper.MapEntityToResponseDto(_courseRepository.Update(id, existingCourse));
+    }
+
+    public void RemoveCourseById(Guid id) => _courseRepository.DeleteById(id);
 }

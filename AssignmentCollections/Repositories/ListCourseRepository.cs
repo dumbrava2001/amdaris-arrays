@@ -21,9 +21,11 @@ public class ListCourseRepository : IRepository<CourseEntity>
 
     public void Delete(CourseEntity entity) => _courseList.Remove(entity);
 
-    public CourseEntity Update(CourseEntity entity)
+    public void DeleteById(Guid id) => Delete(GetById(id));
+
+    public CourseEntity Update(Guid id, CourseEntity entity)
     {
-        var entityToUpdate = GetById(id: entity.Id);
+        var entityToUpdate = GetById(id: id);
         entity.CopyTo(entityToUpdate);
 
         return entityToUpdate;

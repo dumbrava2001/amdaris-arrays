@@ -8,5 +8,6 @@ public interface IRepository<T> where T : BaseEntity
     List<T> GetAll();
     T Save(T entity);
     void Delete(T entity);
-    T Update(T entity);
+    void DeleteById(Guid id);
+    T Update(Guid id, T entity);
 }
