@@ -11,5 +11,16 @@ namespace AssignmentCollections.Entities
         public string Image { get; set; }
         public EnrollType EnrollType { get; set; }
         public IEnumerable<CourseModuleEntity> ModuleList { get; set; }
+
+        public void CopyTo(CourseEntity entity)
+        {
+            entity.Id = Id;
+            entity.Color = Color;
+            entity.Password = Password;
+            entity.Owner = Owner;
+            entity.Image = Image;
+            entity.EnrollType = EnrollType;
+            entity.ModuleList = ModuleList;
+        }
     }
 }
