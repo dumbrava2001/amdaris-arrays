@@ -1,0 +1,15 @@
+﻿using AssignmentCollections.Enums;
+
+namespace AssignmentCollections.Entities
+{
+    public class CourseEntity : BaseEntity
+    {
+        public string Title { get; set; }
+        public string Color { get; set; }
+        public string Password { get; set; }
+        public UserEntity Owner { get; set; }
+        public string Image { get; set; }
+        public EnrollType EnrollType { get; set; }
+        public IEnumerable<CourseModuleEntity> ModuleList { get; set; }
+    }
+}
