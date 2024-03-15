@@ -1,6 +1,8 @@
-﻿using AssignmentCollections.Entities;
+﻿using System.Collections.ObjectModel;
+using AssignmentCollections.Entities;
 using AssignmentCollections.Enums;
 using AssignmentCollections.Models.Requests;
+using AssignmentCollections.Models.Responses;
 using AssignmentCollections.Repositories;
 using AssignmentCollections.Services;
 
@@ -26,16 +28,37 @@ internal static class Program
 
         //GET all courses in response format
         var allCourses = courseService.GetAllCourses();
+        Console.WriteLine("Display all courses after creation");
+        DisplayCourses(allCourses.ToList()!);
 
         //Get course by id
         var courseById = courseService.GetCourseById(createdCourseResponse.Id);
+        Console.WriteLine("\nDisplay course received by id search");
+        DisplayCourses(courseById);
 
         //Update course
         var updatedDbCourseRequest =
             new CourseRequestDto("Database", "/courses/database/primary.png", "#A2FF32", EnrollType.PRIVATE);
         var updateResponse = courseService.UpdateCourse(createdCourseResponse.Id, updatedDbCourseRequest);
+        Console.WriteLine("\nDisplay updated course");
+        DisplayCourses(updateResponse);
 
         //Remove course by id
         courseService.RemoveCourseById(createdCourseResponse.Id);
+        Console.WriteLine("\nDisplay all courses after deleting one course by id");
+        DisplayCourses(courseService.GetAllCourses().ToList());
+    }
+
+    private static void DisplayCourses(CourseResponseDto course)
+    {
+        Console.WriteLine($"Id:{course.Id}\nTitle:{course.Title}\nColor:{course.Color}");
+    }
+
+    private static void DisplayCourses(List<CourseResponseDto> courseList)
+    {
+        foreach (var courseResponseDto in courseList)
+        {
+            DisplayCourses(courseResponseDto);
+        }
     }
 }
