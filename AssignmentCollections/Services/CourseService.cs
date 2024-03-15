@@ -17,23 +17,24 @@ public class CourseService
 
     public CourseResponseDto CreateCourse(CourseRequestDto courseRequestDto)
     {
-        var newCourse = new CourseEntity
-        {
-            Title = courseRequestDto.Title,
-            Image = courseRequestDto.ImagePath,
-            Color = courseRequestDto.Color
-        };
+        var newCourse = (CourseEntity)AutoMapper.MapDtoToEntity(courseRequestDto);
+        var createdCurse = _courseRepository.Save(newCourse);
+        var response = (CourseResponseDto)AutoMapper.MapEntityToResponseDto(createdCurse);
 
-        return (CourseResponseDto)AutoMapper.MapEntityToResponseDto(_courseRepository.Save(newCourse));
+        return response;
     }
 
-    public CourseResponseDto GetCourseById(Guid id) =>
-        (CourseResponseDto)AutoMapper.MapEntityToResponseDto(_courseRepository.GetById(id));
+    public CourseResponseDto GetCourseById(Guid id)
+    {
+        var existingCourseEntity = _courseRepository.GetById(id);
+        var response = (CourseResponseDto)AutoMapper.MapEntityToResponseDto(existingCourseEntity);
+        return response;
+    }
 
     public IEnumerable<CourseResponseDto?> GetAllCourses()
     {
         return _courseRepository.GetAll()
-            .Select(entity => AutoMapper.MapEntityToResponseDto(entity) as CourseResponseDto).ToList();
+            .Select(entity => AutoMapper.MapEntityToResponseDto(entity) as CourseResponseDto);
     }
 
     public CourseResponseDto UpdateCourse(Guid id, CourseRequestDto updateRequest)
@@ -44,7 +45,10 @@ public class CourseService
         existingCourse.EnrollType = updateRequest.EnrollType;
         existingCourse.Image = updateRequest.ImagePath;
 
-        return (CourseResponseDto)AutoMapper.MapEntityToResponseDto(_courseRepository.Update(id, existingCourse));
+        var updatedCourse = _courseRepository.Update(id, existingCourse);
+        var response = (CourseResponseDto)AutoMapper.MapEntityToResponseDto(updatedCourse);
+
+        return response;
     }
 
     public void RemoveCourseById(Guid id) => _courseRepository.DeleteById(id);
